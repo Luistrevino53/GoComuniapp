@@ -2,6 +2,7 @@ package Services
 
 import (
 	"context"
+	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -42,6 +43,9 @@ func (dataPeopleService) CreatePerson(ctx context.Context, person Models.Person,
 
 func (dataPeopleService) GetPerson(ctx context.Context, id string, client *mongo.Client) (*Models.Person, error) {
 	var person Models.Person
+	if id == "" {
+		return &person, errors.New("id parameter is nil or blank")
+	}
 	hexId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return &person, err
