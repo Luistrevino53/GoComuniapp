@@ -12,19 +12,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"./Models"
 )
 
 var client *mongo.Client
 
-type Person struct {
-	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Firstname string             `json:"firstname,omitempty" bson:"firstname,omitempty"`
-	Lastname  string             `json:"lastname,omitempty" bson:"lastname,omitempty"`
-}
-
 func CreatePersonEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
-	var person Person
+	var person Models.Person
 	_ = json.NewDecoder(request.Body).Decode(&person)
 	collection := client.Database("testdb").Collection("people")
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
@@ -35,10 +31,10 @@ func GetPersonEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
 	params := mux.Vars(request)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	var person Person
+	var person Models.Person
 	collection := client.Database("testdb").Collection("people")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	err := collection.FindOne(ctx, Person{ID: id}).Decode(&person)
+	err := collection.FindOne(ctx, Models.Person{ID: id}).Decode(&person)
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -49,7 +45,7 @@ func GetPersonEndpoint(response http.ResponseWriter, request *http.Request) {
 }
 func GetPeopleEndpoint(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("content-type", "application/json")
-	var people []Person
+	var people []Models.Person
 	collection := client.Database("testdb").Collection("people")
 	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	cursor, err := collection.Find(ctx, bson.M{})
@@ -60,7 +56,7 @@ func GetPeopleEndpoint(response http.ResponseWriter, request *http.Request) {
 	}
 	defer cursor.Close(ctx)
 	for cursor.Next(ctx) {
-		var person Person
+		var person Models.Person
 		cursor.Decode(&person)
 		people = append(people, person)
 	}
