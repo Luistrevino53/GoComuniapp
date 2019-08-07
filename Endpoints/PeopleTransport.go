@@ -1,4 +1,4 @@
-package Transports
+package Endpoints
 
 import (
 	"context"
@@ -14,7 +14,7 @@ type getPersonRequest struct {
 
 type getPersonResponse struct {
 	person *Models.Person `json:"person"`
-	Err    error          `json:"err,omitempty"`
+	Err    string         `json:"err,omitempty"`
 }
 
 type createPersonRequest struct {
@@ -23,14 +23,14 @@ type createPersonRequest struct {
 
 type createPersonResponse struct {
 	id  string `json:"_id"`
-	Err error  `json:"err,omitempty"`
+	Err string `json:"err,omitempty"`
 }
 
 type getPeopleRequest struct{}
 
 type getPeopleResponse struct {
 	people []Models.Person `json:"people"`
-	Err    error           `json:"err,omitempty"`
+	Err    string          `json:"err,omitempty"`
 }
 
 func decodeCreatePersonRequest(ctx context.Context, r *http.Request) (interface{}, error) {
