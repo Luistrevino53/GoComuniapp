@@ -9,27 +9,27 @@ import (
 )
 
 type getPersonRequest struct {
-	id string `json:"_id"`
+	Id string `json:"_id"`
 }
 
 type getPersonResponse struct {
-	person *Models.Person `json:"person"`
-	Err    string         `json:"err,omitempty"`
+	Person Models.Person `json:"person"`
+	Err    string        `json:"err,omitempty"`
 }
 
 type createPersonRequest struct {
-	person Models.Person `json:"person"`
+	Person Models.Person `json:"person"`
 }
 
 type createPersonResponse struct {
-	id  string `json:"_id"`
+	Id  string `json:"_id"`
 	Err string `json:"err,omitempty"`
 }
 
 type getPeopleRequest struct{}
 
 type getPeopleResponse struct {
-	people []Models.Person `json:"people"`
+	People []Models.Person `json:"people"`
 	Err    string          `json:"err,omitempty"`
 }
 
