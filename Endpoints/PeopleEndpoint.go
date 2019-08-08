@@ -36,7 +36,8 @@ func MakeCreatePerson(srv Services.PeopleService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		client := setup(ctx)
 		req := request.(createPersonRequest)
-		p, err := srv.CreatePerson(ctx, req.Person, client)
+		person := Models.Person{Firstname: req.Firstname, Lastname: req.Lastname}
+		p, err := srv.CreatePerson(ctx, person, client)
 		if err != nil {
 			return createPersonResponse{p, err.Error()}, nil
 		}

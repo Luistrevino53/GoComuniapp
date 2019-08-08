@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
+
 	"../Models"
 )
 
@@ -18,7 +20,8 @@ type getPersonResponse struct {
 }
 
 type createPersonRequest struct {
-	Person Models.Person `json:"person"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
 }
 
 type createPersonResponse struct {
@@ -43,11 +46,8 @@ func DecodeCreatePersonRequest(ctx context.Context, r *http.Request) (interface{
 }
 
 func DecodeGetPersonRequest(ctx context.Context, r *http.Request) (interface{}, error) {
-	var req getPersonRequest
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		return nil, err
-	}
+	parms := mux.Vars(r)
+	req := getPersonRequest{Id: parms["id"]}
 	return req, nil
 }
 
