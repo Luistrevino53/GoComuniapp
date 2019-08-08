@@ -33,6 +33,9 @@ func NewPeopleService() PeopleService {
 
 func (dataPeopleService) CreatePerson(ctx context.Context, person Models.Person, client *mongo.Client) (string, error) {
 	collection := client.Database(DB_NAME).Collection(COLLECTION_NAME)
+	if !validPerson(person) {
+		return "error", errors.New("The firstname and the lastname are empty")
+	}
 	result, err := collection.InsertOne(ctx, person)
 	if err != nil {
 		return "error", err
@@ -76,4 +79,13 @@ func (dataPeopleService) GetPeople(ctx context.Context, client *mongo.Client) ([
 		return people, err
 	}
 	return people, nil
+}
+
+func validPerson(p Models.Person) bool {
+	flag := true
+
+	if p.Firstname == "" && p.Lastname == "" {
+		flag = false
+	}
+	return flag
 }
