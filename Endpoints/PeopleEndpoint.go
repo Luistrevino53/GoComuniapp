@@ -50,9 +50,9 @@ func MakeGetPeople(srv Services.PeopleService) endpoint.Endpoint {
 		_ = request.(getPeopleRequest)
 		list, err := srv.GetPeople(ctx, client)
 		if err != nil {
-			return getPeopleResponse{*list, err.Error()}, nil
+			return getPeopleResponse{list, err.Error()}, nil
 		}
-		return getPeopleResponse{*list, ""}, nil
+		return getPeopleResponse{list, ""}, nil
 	}
 }
 
