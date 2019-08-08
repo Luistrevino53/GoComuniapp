@@ -24,11 +24,11 @@ func MakeGetPerson(srv Services.PeopleService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		client := setup(ctx)
 		req := request.(getPersonRequest)
-		s, err := srv.GetPerson(ctx, req.id, client)
+		s, err := srv.GetPerson(ctx, req.Id, client)
 		if err != nil {
-			return getPersonResponse{s, err.Error()}, nil
+			return getPersonResponse{*s, err.Error()}, nil
 		}
-		return getPersonResponse{s, ""}, nil
+		return getPersonResponse{*s, ""}, nil
 	}
 }
 
@@ -36,7 +36,7 @@ func MakeCreatePerson(srv Services.PeopleService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		client := setup(ctx)
 		req := request.(createPersonRequest)
-		p, err := srv.CreatePerson(ctx, req.person, client)
+		p, err := srv.CreatePerson(ctx, req.Person, client)
 		if err != nil {
 			return createPersonResponse{p, err.Error()}, nil
 		}
@@ -66,7 +66,7 @@ func (e PeopleEndpoints) GetPerson(ctx context.Context) (*Models.Person, error) 
 	if getResp.Err != "" {
 		return new(Models.Person), errors.New(getResp.Err)
 	}
-	return getResp.person, nil
+	return &getResp.Person, nil
 
 }
 
@@ -80,7 +80,7 @@ func (e PeopleEndpoints) GetPeople(ctx context.Context) ([]Models.Person, error)
 	if peopleResp.Err != "" {
 		return *new([]Models.Person), errors.New(peopleResp.Err)
 	}
-	return peopleResp.people, nil
+	return peopleResp.People, nil
 }
 
 func setup(ctx context.Context) *mongo.Client {
