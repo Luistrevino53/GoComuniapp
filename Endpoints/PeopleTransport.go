@@ -33,7 +33,7 @@ type getPeopleResponse struct {
 	Err    string          `json:"err,omitempty"`
 }
 
-func decodeCreatePersonRequest(ctx context.Context, r *http.Request) (interface{}, error) {
+func DecodeCreatePersonRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var req createPersonRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -42,7 +42,7 @@ func decodeCreatePersonRequest(ctx context.Context, r *http.Request) (interface{
 	return req, nil
 }
 
-func decodeGetPersonRequest(ctx context.Context, r *http.Request) (interface{}, error) {
+func DecodeGetPersonRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var req getPersonRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -51,11 +51,11 @@ func decodeGetPersonRequest(ctx context.Context, r *http.Request) (interface{}, 
 	return req, nil
 }
 
-func decodeGetPeopleRequest(ctx context.Context, r *http.Request) (interface{}, error) {
+func DecodeGetPeopleRequest(ctx context.Context, r *http.Request) (interface{}, error) {
 	var req getPeopleRequest
 	return req, nil
 }
 
-func encodeResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+func EncodeResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	return json.NewEncoder(w).Encode(response)
 }
