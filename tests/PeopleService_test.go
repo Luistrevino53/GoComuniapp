@@ -39,6 +39,15 @@ func TestCreatePerson(t *testing.T) {
 	id = s
 }
 
+func TestCreatePersonEmpty(t *testing.T) {
+	srv, ctx, client := setup()
+	var person Models.Person
+	_, err := srv.CreatePerson(ctx, person, client)
+	if err == nil {
+		t.Errorf("Error: %s", err)
+	}
+}
+
 func TestGetPerson(t *testing.T) {
 	srv, ctx, client := setup()
 	var person *Models.Person
@@ -57,12 +66,12 @@ func TestGetPerson(t *testing.T) {
 
 func TestGetPeople(t *testing.T) {
 	srv, ctx, client := setup()
-	var people *[]Models.Person
+	var people []Models.Person
 	people, err := srv.GetPeople(ctx, client)
 	if err != nil {
 		t.Errorf("Error: %s", err)
 	}
-	flag := len(*people) != 0
+	flag := len(people) != 0
 	if !flag {
 		t.Errorf("The database not return a list of people")
 	}
